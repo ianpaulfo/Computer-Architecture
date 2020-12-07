@@ -2,12 +2,20 @@
 
 import sys
 
+HLT = 0b00000001
+LDI = 0b10000010
+PRN = 0b01000111
+
 class CPU:
     """Main CPU class."""
 
     def __init__(self):
         """Construct a new CPU."""
-        pass
+        self.registers = [0] * 8
+        self.registers[7] = 0xF4
+        self.pc = 0 
+        self.ram = [0] * 256
+        self.halted = False
 
     def load(self):
         """Load a program into memory."""
@@ -40,6 +48,11 @@ class CPU:
         else:
             raise Exception("Unsupported ALU operation")
 
+        """
+        store value in memory
+        """
+        pass
+
     def trace(self):
         """
         Handy function to print out the CPU state. You might want to call this
@@ -60,6 +73,33 @@ class CPU:
 
         print()
 
+    def ram_read(self, address):
+        """
+        read from memory
+        """
+        return self.ram[address]
+
+    def ram_write(self, value, address):
+        self.ram[address] = value
+
+
     def run(self):
         """Run the CPU."""
-        pass
+        while not self.halted:
+            instruction_to_execute = self.ram_read(self.pc)
+            opperand_a = self.ram_read(self.pc + 1)
+            opperand_b = self.ram_read(self.pc + 2)
+            self.execute_intstruction(instruction_to_execute, opperand_a, opperand_b)
+
+    def execute_intstruction(self, instruction, opperand_a, opperand_b):
+        if instruction == HLT:
+            self.halted = True
+            self.pc += 1
+        elif instruction == PRN:
+            print(self.registers[opperand_a])
+            self.pc += 2
+        elif instruction == LDI:
+            self.registers[opperand_a] = opperand_b
+            self.pc += 3
+        else:
+            print('I dont know what to do.')
