@@ -87,8 +87,8 @@ class CPU:
         """Run the CPU."""
         while not self.halted:
             instruction_to_execute = self.ram_read(self.pc)
-            opperand_a = ram_read(self.pc + 1)
-            opperand_b = ram_read(self.pc + 2)
+            opperand_a = self.ram_read(self.pc + 1)
+            opperand_b = self.ram_read(self.pc + 2)
             self.execute_intstruction(instruction_to_execute, opperand_a, opperand_b)
 
     def execute_intstruction(self, instruction, opperand_a, opperand_b):
