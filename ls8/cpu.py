@@ -17,13 +17,11 @@ class CPU:
         self.ram = [0] * 256
         self.halted = False
 
-    def load(self):
+    def load(self, filename):
         """Load a program into memory."""
 
         address = 0
-
         # For now, we've just hardcoded a program:
-
         program = [
             # From print8.ls8
             0b10000010, # LDI R0,8
